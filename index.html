@@ -1,490 +1,1819 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>AI4LIFE</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-<link rel="stylesheet" href="css/animate.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="style.css"/>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-<!-- Font Google -->
-<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI4LIFE — Giải Pháp AI Thông Minh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* Điều chỉnh kích thước logo */
-    .logo-1 {
-        width: 100px; /* Thay đổi kích thước theo nhu cầu */
-        height: auto; /* Giữ tỷ lệ khung hình */
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --navy-deep:   #020b18;
+      --navy-dark:   #041529;
+      --navy-mid:    #0a2540;
+      --navy-light:  #0f3a5e;
+      --neon-cyan:   #00f5ff;
+      --neon-blue:   #0af;
+      --neon-green:  #00ff88;
+      --neon-purple: #7b5ea7;
+      --gold:        #ffd700;
+      --white:       #f0f8ff;
+      --gray-light:  #8ab4cc;
+      --gray-mid:    #4a7a99;
+      --glow-cyan:   0 0 20px rgba(0,245,255,0.5), 0 0 60px rgba(0,245,255,0.2);
+      --glow-blue:   0 0 20px rgba(0,170,255,0.5);
+      --transition:  0.35s cubic-bezier(.4,0,.2,1);
     }
 
-    Tùy chỉnh navbar nếu cần
-    .navbar {
-        background-color: #ffffff; /* Màu nền navbar */
-        padding: 10px 0;
+    body {
+      background: var(--navy-deep);
+      color: var(--white);
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 400;
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+      overflow-x: hidden;
+
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--navy-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 3px; }
+
+    /* ===== GRID BACKGROUND ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,170,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,170,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0 5%;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(2,11,24,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0,170,255,0.15);
+      transition: var(--transition);
+    }
+    nav.scrolled {
+      background: rgba(2,11,24,0.97);
+      border-bottom-color: rgba(0,245,255,0.3);
+    }
+
+    /* LOGO */
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 44px; height: 44px;
+      flex-shrink: 0;
+    }
+    .logo-text {
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--white);
+      letter-spacing: 0.08em;
+    }
+    .logo-text span { color: var(--neon-cyan); }
+
+    /* NAV LINKS */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--gray-light);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      /* text-transform: uppercase; */
+      transition: color var(--transition);
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--neon-cyan);
+      transition: width var(--transition);
+      box-shadow: var(--glow-cyan);
+    }
+    .nav-links a:hover { color: var(--neon-cyan); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      background: transparent;
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan) !important;
+      padding: 8px 20px;
+      border-radius: 4px;
+      text-transform: none;
+      transition: var(--transition) !important;
+    }
+    .nav-cta:hover {
+      background: rgba(0,245,255,0.12) !important;
+      box-shadow: var(--glow-cyan) !important;
+    }
+    .nav-cta::after { display: none !important; }
+
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px; height: 2px;
+      background: var(--neon-cyan);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    /* ===== HERO ===== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 100px 5% 80px;
+      overflow: hidden;
+    }
+
+    /* Orb glows */
+    #hero::before, #hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    #hero::before {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,170,255,0.18) 0%, transparent 70%);
+      top: -100px; right: -150px;
+      animation: orb-drift 8s ease-in-out infinite alternate;
+    }
+    #hero::after {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,255,136,0.1) 0%, transparent 70%);
+      bottom: 0; left: 10%;
+      animation: orb-drift 10s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes orb-drift {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(30px, -40px) scale(1.08); }
+    }
+
+    .hero-content {
+      position: relative; z-index: 1;
+      max-width: 680px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,170,255,0.1);
+      border: 1px solid rgba(0,170,255,0.3);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      /* text-transform: uppercase; */
+      color: var(--neon-blue);
+      margin-bottom: 28px;
+    }
+    .hero-badge .dot {
+      width: 8px; height: 8px;
+      background: var(--neon-green);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,255,136,0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(0,255,136,0); }
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .hero-title .accent { color: var(--neon-cyan); }
+    .hero-tagline {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(0.9rem, 2vw, 1.15rem);
+      font-weight: 400;
+      color: var(--gray-light);
+      letter-spacing: 0.12em;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+    .hero-desc {
+      font-size: 1.05rem;
+      color: #a8c8e0;
+      max-width: 560px;
+      margin-bottom: 44px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #0af 0%, #00c8ff 100%);
+      color: var(--navy-deep);
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 14px 30px;
+      border-radius: 6px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #00f5ff, #0af);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--glow-cyan); }
+    .btn-primary:hover::before { opacity: 1; }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      border: 1px solid rgba(0,170,255,0.4);
+      color: var(--gray-light);
+      font-size: 0.88rem;
+      padding: 14px 30px;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-outline:hover {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      background: rgba(0,245,255,0.06);
+    }
+
+    /* Contact icons in hero */
+    .hero-contacts {
+      display: flex;
+      gap: 14px;
+      margin-top: 48px;
+      align-items: center;
+    }
+    .hero-contacts span { font-size: 0.78rem; color: var(--gray-mid); letter-spacing: 0.08em; text-transform: uppercase; }
+    .contact-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,170,255,0.08);
+      border: 1px solid rgba(0,170,255,0.25);
+      padding: 7px 16px;
+      border-radius: 100px;
+      text-decoration: none;
+      color: var(--gray-light);
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    .contact-chip:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,245,255,0.1); }
+    .contact-chip svg { width: 16px; height: 16px; }
+
+    /* Stats strip */
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 60px;
+      padding-top: 36px;
+      border-top: 1px solid rgba(0,170,255,0.15);
+    }
+    .stat-item { text-align: left; }
+    .stat-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--gray-mid);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Hero visual side */
+    .hero-visual {
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: min(420px, 42vw);
+      z-index: 1;
+    }
+
+    /* ===== SECTION BASE ===== */
+    section { position: relative; z-index: 1; }
+    .section-pad { padding: 100px 5%; }
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      /* text-transform: uppercase; */
+      color: var(--neon-cyan);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+    .section-title .accent { color: var(--neon-cyan); }
+    .section-desc {
+      max-width: 600px;
+      margin: 0 auto;
+      color: var(--gray-light);
+      font-size: 1rem;
+    }
+    .line-deco {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 20px 0 0;
+    }
+    .line-deco span {
+      height: 2px; border-radius: 2px;
+    }
+    .line-deco span:nth-child(1) { width: 40px; background: var(--neon-cyan); }
+    .line-deco span:nth-child(2) { width: 12px; background: rgba(0,245,255,0.4); }
+    .line-deco span:nth-child(3) { width: 6px; background: rgba(0,245,255,0.2); }
+
+    /* ===== ABOUT ===== */
+    #about { background: var(--navy-dark); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about-text h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+    .about-text h2 span { color: var(--neon-cyan); }
+    .about-text p { color: #a8c8e0; margin-bottom: 16px; }
+    .about-tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 32px;
+    }
+    .tech-pill {
+      background: rgba(0,170,255,0.1);
+      border: 1px solid rgba(0,170,255,0.25);
+      color: var(--neon-blue);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 6px 14px;
+      border-radius: 100px;
+      transition: var(--transition);
+    }
+    .tech-pill:hover { background: rgba(0,245,255,0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
+
+    .about-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .pillar-card {
+      background: rgba(15,58,94,0.4);
+      border: 1px solid rgba(0,170,255,0.18);
+      border-radius: 12px;
+      padding: 28px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      transition: var(--transition);
+    }
+    .pillar-card:hover {
+      border-color: rgba(0,245,255,0.45);
+      background: rgba(0,170,255,0.08);
+      transform: translateX(6px);
+    }
+    .pillar-icon {
+      width: 48px; height: 48px;
+      border-radius: 10px;
+      background: rgba(0,170,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--neon-cyan);
+    }
+    .pillar-icon svg { width: 24px; height: 24px; }
+    .pillar-info h4 {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--white);
+    }
+    .pillar-info p { color: var(--gray-light); font-size: 0.9rem; margin: 0; }
+
+    /* ===== SERVICES ===== */
+    #services { background: var(--navy-deep); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: rgba(4,21,41,0.8);
+      border: 1px solid rgba(0,170,255,0.15);
+      border-radius: 16px;
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: default;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-blue));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s ease;
+    }
+    .service-card:hover {
+      border-color: rgba(0,245,255,0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(0,170,255,0.1);
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.7rem;
+      color: var(--neon-cyan);
+      opacity: 0.5;
+      letter-spacing: 0.15em;
+      margin-bottom: 20px;
+    }
+    .service-icon-wrap {
+      width: 60px; height: 60px;
+      border-radius: 14px;
+      background: rgba(0,170,255,0.12);
+      border: 1px solid rgba(0,170,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      color: var(--neon-cyan);
+      transition: var(--transition);
+    }
+    .service-card:hover .service-icon-wrap {
+      background: rgba(0,245,255,0.2);
+      box-shadow: var(--glow-cyan);
+    }
+    .service-icon-wrap svg { width: 28px; height: 28px; }
+    .service-card h3 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--white);
+    }
+    .service-card p { color: var(--gray-light); font-size: 0.92rem; margin-bottom: 20px; }
+    .service-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .service-tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--neon-blue);
+      background: rgba(0,170,255,0.08);
+      border: 1px solid rgba(0,170,255,0.2);
+      padding: 4px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ===== SOLUTIONS HIGHLIGHT ===== */
+    #solutions {
+      background: linear-gradient(180deg, var(--navy-dark) 0%, var(--navy-mid) 100%);
+    }
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .solution-item {
+      background: rgba(2,11,24,0.6);
+      border: 1px solid rgba(0,170,255,0.15);
+      border-radius: 12px;
+      padding: 28px 24px;
+      text-align: center;
+      transition: var(--transition);
+    }
+    .solution-item:hover {
+      border-color: var(--neon-cyan);
+      background: rgba(0,170,255,0.06);
+      transform: translateY(-4px);
+    }
+    .solution-emoji {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+    }
+    .solution-item h4 {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--neon-cyan);
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+    .solution-item p { color: var(--gray-light); font-size: 0.85rem; }
+
+    /* ===== INDUSTRIES / CLIENTS ===== */
+    #clients { background: var(--navy-deep); }
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .client-card {
+      background: rgba(10,37,64,0.6);
+      border: 1px solid rgba(0,170,255,0.15);
+      border-radius: 14px;
+      padding: 36px 24px;
+      text-align: center;
+      transition: var(--transition);
+    }
+    .client-card:hover {
+      border-color: rgba(0,245,255,0.4);
+      background: rgba(0,170,255,0.07);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .client-icon {
+      width: 64px; height: 64px;
+      background: rgba(0,170,255,0.12);
+      border: 1px solid rgba(0,170,255,0.25);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: var(--neon-cyan);
+    }
+    .client-icon svg { width: 32px; height: 32px; }
+    .client-card h4 {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .client-card p { color: var(--gray-light); font-size: 0.88rem; }
+
+    /* ===== PROCESS ===== */
+    #process { background: var(--navy-dark); }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 40px; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,170,255,0.5), rgba(0,245,255,0.8), rgba(0,170,255,0.5), transparent);
+    }
+    .process-step {
+      text-align: center;
+      padding: 0 16px;
+      padding-top: 8px;
+    }
+    .step-circle {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--navy-deep);
+      border: 2px solid var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--neon-cyan);
+      box-shadow: var(--glow-cyan);
+      position: relative; z-index: 1;
+    }
+    .process-step h4 {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .process-step p { color: var(--gray-light); font-size: 0.85rem; }
+
+    /* ===== WHY SECTION ===== */
+    #why { background: var(--navy-deep); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .why-item {
+      padding: 32px;
+      background: rgba(4,21,41,0.8);
+      border: 1px solid rgba(0,170,255,0.12);
+      border-radius: 14px;
+      transition: var(--transition);
+    }
+    .why-item:hover {
+      border-color: rgba(0,245,255,0.35);
+      box-shadow: 0 0 30px rgba(0,170,255,0.08);
+    }
+    .why-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+      opacity: 0.25;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .why-item h4 {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .why-item p { color: var(--gray-light); font-size: 0.9rem; }
+
+    /* ===== CTA SECTION ===== */
+    #cta {
+      background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-dark) 100%);
+      padding: 100px 5%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #cta::before {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(0,245,255,0.08) 0%, transparent 60%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    #cta h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 900;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    #cta h2 span { color: var(--neon-cyan); }
+    #cta p {
+      color: var(--gray-light);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      font-size: 1.05rem;
+      position: relative;
+    }
+    .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+    /* ===== CONTACT ===== */
+    #contact { background: var(--navy-dark); }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .contact-info h3 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 32px;
+    }
+    .contact-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .contact-item-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: rgba(0,170,255,0.1);
+      border: 1px solid rgba(0,170,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--neon-cyan);
+      flex-shrink: 0;
+    }
+    .contact-item-icon svg { width: 20px; height: 20px; }
+    .contact-item-text p:first-child {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      margin-bottom: 4px;
+    }
+    .contact-item-text a, .contact-item-text span {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color var(--transition);
+    }
+    .contact-item-text a:hover { color: var(--neon-cyan); }
+
+    /* Form */
+    .contact-form {
+      background: rgba(4,21,41,0.8);
+      border: 1px solid rgba(0,170,255,0.18);
+      border-radius: 16px;
+      padding: 40px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-input {
+      width: 100%;
+      background: rgba(2,11,24,0.8);
+      border: 1px solid rgba(0,170,255,0.2);
+      border-radius: 8px;
+      padding: 14px 18px;
+      color: var(--white);
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.93rem;
+      transition: var(--transition);
+      outline: none;
+    }
+    .form-input::placeholder { color: var(--gray-mid); }
+    .form-input:focus {
+      border-color: var(--neon-cyan);
+      background: rgba(0,245,255,0.04);
+      box-shadow: 0 0 0 3px rgba(0,245,255,0.08);
+    }
+    textarea.form-input {
+      resize: vertical;
+      min-height: 130px;
+      margin-bottom: 20px;
+    }
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #0af 0%, #00c8ff 100%);
+      color: var(--navy-deep);
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-submit:hover { box-shadow: var(--glow-cyan); transform: translateY(-2px); }
+    .msg-box {
+      display: none;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      text-align: center;
+      font-weight: 500;
+    }
+    .msg-box.success { background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: var(--neon-green); display: block; }
+    .msg-box.error { background: rgba(255,60,60,0.1); border: 1px solid rgba(255,60,60,0.3); color: #ff6b6b; display: block; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #010a14;
+      border-top: 1px solid rgba(0,170,255,0.15);
+      padding: 48px 5% 32px;
+      text-align: center;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .footer-logo-text {
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--white);
+    }
+    .footer-logo-text span { color: var(--neon-cyan); }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      list-style: none;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: var(--gray-mid);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      /* text-transform: uppercase; */
+      transition: color var(--transition);
+    }
+    .footer-links a:hover { color: var(--neon-cyan); }
+    .footer-bottom {
+      color: var(--gray-mid);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+    }
+    .footer-bottom span { color: var(--neon-cyan); }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== MOBILE NAV OVERLAY ===== */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(2,11,24,0.98);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      backdrop-filter: blur(20px);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-family: 'Orbitron', monospace;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color var(--transition);
+    }
+    .mobile-nav a:hover { color: var(--neon-cyan); }
+    .mobile-nav-close {
+      position: absolute;
+      top: 22px; right: 5%;
+      background: none;
+      border: none;
+      color: var(--gray-light);
+      font-size: 1.5rem;
+      cursor: pointer;
+      font-family: 'Orbitron', monospace;
+    }
+
+
+    /* ===== TYPOGRAPHY IMPROVE ===== */
+
+    /* Paragraph dễ đọc hơn */
+    p {
+      max-width: 65ch;
+    }
+
+    /* Text sáng hơn */
+    :root {
+      --gray-light: #9fc3da;
+    }
+
+    /* Description rõ hơn */
+    .hero-desc,
+    .about-text p {
+      color: #c3e0f5;
+      font-size: 1.08rem;
+      line-height: 1.8;
+    }
+
+    /* Navbar dễ đọc */
+    .nav-links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+    }
+
+    /* Button đẹp hơn */
+    .btn-primary {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+
+    /* Form input */
+    .form-input {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .hero-visual { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .contact-layout { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr 1fr; }
+      .process-steps::before { display: none; }
+      .hero-stats { gap: 28px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 20px; }
+      .stat-num { font-size: 1.4rem; }
+    }
+
+    /* Typing cursor */
+    .typing-cursor::after {
+      content: '|';
+      color: var(--neon-cyan);
+      animation: blink 1s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* Neon line separator */
+    .neon-sep {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,245,255,0.4), transparent);
+      margin: 0;
+    }
+
+    /* Tất cả heading tiếng Việt */
+    .hero-tagline,
+    .hero-desc,
+    .section-desc,
+    .pillar-info p,
+    .service-card p,
+    .solution-item p,
+    .client-card p,
+    .process-step p,
+    .why-item p,
+    .contact-item-text a,
+    .contact-item-text span,
+    .about-text p,
+    #cta p {
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+
+    /* Section titles có tiếng Việt — dùng Be Vietnam Pro thay Orbitron */
+    .section-title,
+    .hero-title,
+    .about-text h2,
+    .service-card h3,
+    .solution-item h4,
+    .client-card h4,
+    .pillar-info h4,
+    .process-step h4,
+    .why-item h4,
+    #cta h2 {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.01em; /* Orbitron dùng tracking rộng, Be Vietnam Pro không cần */
+    }
+
+    /* Chỉ giữ Orbitron cho brand elements không có dấu */
+    .logo-text,
+    .footer-logo-text,
+    .hero-badge,
+    .section-label,
+    .service-num,
+    .stat-num,
+    .step-circle,
+    .why-num,
+    .btn-primary,
+    .btn-submit {
+      font-family: 'Orbitron', monospace;
+    }
+
+    /* Form dùng Be Vietnam Pro */
+    .form-input {
+      font-family: 'Be Vietnam Pro', sans-serif;
     }
   </style>
 </head>
-
 <body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
-  <div class="container"> <a class="navbar-brand navbar-logo" href="#"> <img src="images/logo.png" alt="logo" class="logo-1"> </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="fas fa-bars"></span> </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item"> <a class="nav-link" href="" data-scroll-nav="0">Trang chủ</a> </li>
-        <li class="nav-item"> <a class="nav-link" href="#" data-scroll-nav="1">Về chúng tôi</a> </li>
-        <li class="nav-item"> <a class="nav-link" href="#" data-scroll-nav="2">Dịch vụ</a> </li>
-        <li class="nav-item"> <a class="nav-link" href="#" data-scroll-nav="3">Khách hàng</a> </li>
-        <li class="nav-item"> <a class="nav-link" href="#" data-scroll-nav="6">Liên hệ</a> </li>
-      </ul>
-    </div>
-  </div>
+
+<!-- ===== MOBILE NAV ===== -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+  <a href="#hero" onclick="closeMobileNav()">Trang Chủ</a>
+  <a href="#about" onclick="closeMobileNav()">Về Chúng Tôi</a>
+  <a href="#services" onclick="closeMobileNav()">Dịch Vụ</a>
+  <a href="#clients" onclick="closeMobileNav()">Khách Hàng</a>
+  <a href="#contact" onclick="closeMobileNav()">Liên Hệ</a>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar">
+  <a class="logo-wrap" href="#hero">
+    <!-- SVG Logo -->
+    <svg class="logo-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="lg1" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#00f5ff"/>
+          <stop offset="100%" stop-color="#0af"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <!-- Hexagon background -->
+      <polygon points="22,2 40,12 40,32 22,42 4,32 4,12" fill="rgba(0,170,255,0.1)" stroke="url(#lg1)" stroke-width="1.5"/>
+      <!-- Inner hex -->
+      <polygon points="22,8 35,15.5 35,28.5 22,36 9,28.5 9,15.5" fill="rgba(0,245,255,0.06)" stroke="rgba(0,245,255,0.3)" stroke-width="1"/>
+      <!-- AI text elements -->
+      <text x="7" y="27" font-family="Orbitron,monospace" font-size="11" font-weight="900" fill="url(#lg1)" filter="url(#glow)">AI</text>
+      <!-- Circuit dots -->
+      <circle cx="22" cy="6" r="2" fill="#00f5ff" opacity="0.8"/>
+      <circle cx="38" cy="15" r="1.5" fill="#00f5ff" opacity="0.6"/>
+      <circle cx="38" cy="29" r="1.5" fill="#00f5ff" opacity="0.6"/>
+      <circle cx="22" cy="38" r="2" fill="#00f5ff" opacity="0.8"/>
+      <circle cx="6" cy="29" r="1.5" fill="#00f5ff" opacity="0.6"/>
+      <circle cx="6" cy="15" r="1.5" fill="#00f5ff" opacity="0.6"/>
+      <!-- Connection lines -->
+      <line x1="22" y1="8" x2="22" y2="14" stroke="#00f5ff" stroke-width="1" opacity="0.4"/>
+      <line x1="22" y1="30" x2="22" y2="36" stroke="#00f5ff" stroke-width="1" opacity="0.4"/>
+    </svg>
+    <span class="logo-text">AI4<span>LIFE</span></span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#about">Về Chúng Tôi</a></li>
+    <li><a href="#services">Dịch Vụ</a></li>
+    <li><a href="#solutions">Giải Pháp</a></li>
+    <li><a href="#clients">Khách Hàng</a></li>
+    <li><a href="#contact" class="nav-cta">Liên Hệ Ngay</a></li>
+  </ul>
+
+  <button class="hamburger" onclick="openMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
-<!-- End Navbar --> 
-<!-------Banner Start------->
-<section class="banner" data-scroll-index='0'>
-  <div class="banner-overlay">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-8 col-sm-12">
-          <div class="banner-text">
-            <h2 class="white">AI4LIFE</h2>
-            <h6 class="white">Tối ưu quy trình - Kiến tạo giá trị.</h6>
-            <p class="banner-text white">
-              Ứng dụng công nghệ AI không chỉ giúp doanh nghiệp nâng cao hiệu suất, giảm chi phí mà còn mở ra cơ hội đột phá trong vận hành và kinh doanh. 
-              Hãy để chúng tôi giúp bạn khai thác sức mạnh của AI, biến thách thức thành cơ hội và tạo nên giá trị bền vững.
-              <br><br>
-              Bạn đã sẵn sàng tối ưu hóa doanh nghiệp bằng AI? Hãy liên hệ ngay với chúng tôi!
-          </p>
-            <ul>
-              <li>
-                <a href="https://t.me/thuatnh" target="_blank">
-                  <img src="images/Telegram.jpg" class="wow fadeInUp" data-wow-delay="0.4s" style="height: 75px; object-fit: contain;"/>
-                </a>
-              </li>
-              <li>
-                <a href="https://zaloapp.com/qr/p/b0bw2k2jpmg7" target="_blank">
-                  <img src="images/zalo.png" class="wow fadeInUp" data-wow-delay="0.7s" style="height: 80px; object-fit: contain;"/>
-                </a>
-              </li>              
-            </ul>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-12"> <img src="images/Poster AI4LIFE.png" class="img-fluid wow fadeInUp"/> </div>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Giải pháp AI tiên tiến · Hà Nội, Việt Nam
+    </div>
+
+    <h1 class="hero-title">
+      KIẾN TẠO<br>
+      <span class="accent">TƯƠNG LAI</span><br>
+      CÙNG AI
+    </h1>
+    <p class="hero-tagline">Tối ưu quy trình — Kiến tạo giá trị</p>
+
+    <p class="hero-desc">
+      Ứng dụng công nghệ AI giúp doanh nghiệp nâng cao hiệu suất, giảm chi phí vận hành và mở ra cơ hội đột phá. Chúng tôi biến thách thức thành lợi thế cạnh tranh bền vững.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Tư vấn miễn phí
+      </a>
+      <a href="#services" class="btn-outline">
+        Xem dịch vụ →
+      </a>
+    </div>
+
+    <div class="hero-contacts">
+      <span>Kết nối:</span>
+      <a href="https://t.me/thuatnh" target="_blank" class="contact-chip">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.48 13.876l-2.94-.918c-.64-.203-.653-.64.136-.95l11.49-4.43c.532-.194 1-.12.853.671z"/></svg>
+        Telegram
+      </a>
+      <a href="https://zaloapp.com/qr/p/b0bw2k2jpmg7" target="_blank" class="contact-chip">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm.48 17.29c-1.305 0-2.54-.36-3.585-.985L5.76 17.42l1.17-3.375A7.185 7.185 0 0112.48 6c3.975 0 7.2 3.225 7.2 7.2 0 3.975-3.225 7.2-7.2 7.2z"/></svg>
+        Zalo
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Năm kinh nghiệm</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Dự án triển khai</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Hỗ trợ liên tục</div>
       </div>
     </div>
   </div>
-  <span class="svg-wave"> <img class="svg-hero" src="images/applight-wave.svg"> </span> </section>
 
-<!-------Banner End-------> 
-
-<!-------About End------->
-
-<section class="about section-padding prelative" data-scroll-index='1'>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="sectioner-header text-center">
-          <h3>Về chúng tôi</h3>
-          <span class="line"></span>
-          <p>Với hơn 5 năm kinh nghiệm, chúng tôi chuyên nghiên cứu và triển khai các giải pháp Trí tuệ nhân tạo (AI) vào thực tiễn. Chúng tôi không chỉ cung cấp công nghệ, mà còn đồng hành cùng doanh nghiệp trong việc tối ưu hoá quy trình, nâng cao hiệu suất và tạo ra giá trị đột phá.  
-          <br>Chuyên môn của chúng tôi bao gồm: AI Agent, Generative AI, LLM, Computer Vision, Data Science, Deep Learning và Machine Learning.</p>
-        </div>
-        <div class="section-content text-center">
-          <div class="row">
-            <div class="col-md-4">
-              <div class="icon-box wow fadeInUp" data-wow-delay="0.2s"> 
-                <i class="fa fa-briefcase" aria-hidden="true"></i>
-                <h5>Chuyên Nghiệp</h5>
-                <p>Chúng tôi mang đến giải pháp AI với quy trình bài bản, đảm bảo tính chính xác và hiệu quả, giúp doanh nghiệp phát triển bền vững.</p>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="icon-box wow fadeInUp" data-wow-delay="0.4s"> 
-                <i class="fa fa-bolt" aria-hidden="true"></i>
-                <h5>Nhanh Chóng</h5>
-                <p>Với phương pháp triển khai linh hoạt, chúng tôi giúp bạn ứng dụng AI vào doanh nghiệp một cách nhanh chóng, tiết kiệm thời gian và tối ưu vận hành.</p>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="icon-box wow fadeInUp" data-wow-delay="0.6s"> 
-                <i class="fa fa-dollar-sign" aria-hidden="true"></i>
-                <h5>Chi Phí Thấp</h5>
-                <p>Chúng tôi cung cấp giải pháp AI hiệu quả với chi phí hợp lý, phù hợp với cả doanh nghiệp khởi nghiệp và quy mô lớn.</p>
-              </div>
-            </div>
-          </div>
-    </div>
+  <!-- Hero Visual -->
+  <div class="hero-visual">
+    <svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="hg1" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#0af" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#0af" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="hg2" x1="0" y1="0" x2="420" y2="420" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#00f5ff"/>
+          <stop offset="100%" stop-color="#0af"/>
+        </linearGradient>
+        <filter id="hglow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <!-- Outer rings -->
+      <circle cx="210" cy="210" r="190" stroke="rgba(0,170,255,0.1)" stroke-width="1" stroke-dasharray="4 8"/>
+      <circle cx="210" cy="210" r="155" stroke="rgba(0,170,255,0.15)" stroke-width="1"/>
+      <circle cx="210" cy="210" r="120" stroke="rgba(0,245,255,0.2)" stroke-width="1.5"/>
+      <!-- Spinning dashes -->
+      <circle cx="210" cy="210" r="185" stroke="rgba(0,245,255,0.3)" stroke-width="1.5" stroke-dasharray="20 340" filter="url(#hglow)">
+        <animateTransform attributeName="transform" type="rotate" from="0 210 210" to="360 210 210" dur="12s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="210" cy="210" r="148" stroke="rgba(0,170,255,0.4)" stroke-width="2" stroke-dasharray="15 270" filter="url(#hglow)">
+        <animateTransform attributeName="transform" type="rotate" from="360 210 210" to="0 210 210" dur="8s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Center glow -->
+      <circle cx="210" cy="210" r="130" fill="url(#hg1)"/>
+      <!-- Hexagon -->
+      <polygon points="210,90 310,150 310,270 210,330 110,270 110,150" fill="rgba(0,170,255,0.06)" stroke="url(#hg2)" stroke-width="2" filter="url(#hglow)"/>
+      <!-- Inner hex -->
+      <polygon points="210,120 285,162 285,246 210,288 135,246 135,162" fill="rgba(0,245,255,0.04)" stroke="rgba(0,245,255,0.35)" stroke-width="1.5"/>
+      <!-- Center brain icon -->
+      <circle cx="210" cy="210" r="60" fill="rgba(0,170,255,0.1)" stroke="rgba(0,245,255,0.6)" stroke-width="2"/>
+      <text x="210" y="222" font-family="Orbitron,monospace" font-size="28" font-weight="900" fill="url(#hg2)" text-anchor="middle" filter="url(#hglow)">AI</text>
+      <!-- Corner dots -->
+      <circle cx="210" cy="90" r="5" fill="#00f5ff" filter="url(#hglow)"/>
+      <circle cx="310" cy="150" r="4" fill="#00f5ff" opacity="0.8"/>
+      <circle cx="310" cy="270" r="4" fill="#00f5ff" opacity="0.8"/>
+      <circle cx="210" cy="330" r="5" fill="#00f5ff" filter="url(#hglow)"/>
+      <circle cx="110" cy="270" r="4" fill="#00f5ff" opacity="0.8"/>
+      <circle cx="110" cy="150" r="4" fill="#00f5ff" opacity="0.8"/>
+      <!-- Node connectors -->
+      <circle cx="350" cy="120" r="6" fill="rgba(0,245,255,0.6)" stroke="#00f5ff" stroke-width="1.5"/>
+      <line x1="310" y1="150" x2="350" y2="120" stroke="rgba(0,245,255,0.3)" stroke-width="1"/>
+      <circle cx="60" cy="200" r="5" fill="rgba(0,170,255,0.6)" stroke="#0af" stroke-width="1.5"/>
+      <line x1="110" y1="210" x2="60" y2="200" stroke="rgba(0,170,255,0.3)" stroke-width="1"/>
+      <circle cx="355" cy="285" r="5" fill="rgba(0,170,255,0.6)" stroke="#0af" stroke-width="1.5"/>
+      <line x1="310" y1="270" x2="355" y2="285" stroke="rgba(0,170,255,0.3)" stroke-width="1"/>
+      <!-- Pulsing center -->
+      <circle cx="210" cy="210" r="70" stroke="rgba(0,245,255,0.15)" stroke-width="1" fill="none">
+        <animate attributeName="r" values="70;85;70" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0;1" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
   </div>
 </section>
-<!-------About End-------> 
 
-<!-------Video Start------->
-<!-- <section class="video-section prelative text-center white">
-  <div class="section-padding video-overlay">
-    <div class="container">
-      <h3>Watch Now</h3>
-      <i class="fa fa-play" id="video-icon" aria-hidden="true"></i>
-      <div class="video-popup">
-        <div class="video-src">
-          <div class="iframe-src">
-            <iframe src="https://www.youtube.com/embed/Ku52zNnft8k?rel=0&amp;showinfo=0" allowfullscreen></iframe>
-          </div>
-        </div>
+<div class="neon-sep"></div>
+
+<!-- ===== ABOUT ===== -->
+<section id="about" class="section-pad">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <span class="section-label">// Về chúng tôi</span>
+      <h2>Hơn <span>5 năm</span> kiến tạo giá trị từ Trí Tuệ Nhân Tạo</h2>
+      <p>Chúng tôi không chỉ cung cấp công nghệ — chúng tôi đồng hành cùng doanh nghiệp trong hành trình chuyển đổi số, từ tư vấn chiến lược đến triển khai thực tế và vận hành tối ưu.</p>
+      <p>Đội ngũ chuyên gia với nền tảng nghiên cứu sâu và kinh nghiệm thực chiến, sẵn sàng giải quyết bài toán AI phức tạp nhất của bạn.</p>
+      <div class="about-tech-stack">
+        <span class="tech-pill">AI Agent</span>
+        <span class="tech-pill">Generative AI</span>
+        <span class="tech-pill">LLM</span>
+        <span class="tech-pill">Computer Vision</span>
+        <span class="tech-pill">Deep Learning</span>
+        <span class="tech-pill">Machine Learning</span>
+        <span class="tech-pill">Data Science</span>
+        <span class="tech-pill">n8n Automation</span>
+        <span class="tech-pill">RAG Systems</span>
+        <span class="tech-pill">NLP</span>
       </div>
     </div>
-  </div>
-</section> -->
-<!-------Video End-------> 
-
-<!-------Features Start------->
-<section class="feature section-padding" data-scroll-index='2'>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="sectioner-header text-center">
-          <h3>Dịch vụ của chúng tôi</h3>
-          <span class="line"></span>
-          <p>Chúng tôi cung cấp các giải pháp AI tiên tiến, giúp doanh nghiệp & cá nhân tối ưu hóa quy trình, nâng cao hiệu suất và giảm chi phí vận hành.</p>
+    <div class="about-pillars reveal">
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
-        <div class="section-content text-center">
-          <div class="row">
-            <!-- Dịch vụ Tư vấn giải pháp AI -->
-            <div class="col-md-4 col-sm-12">
-              <div class="media single-feature wow fadeInUp" data-wow-delay="0.2s">
-                <div class="media-body text-right media-right-margin">
-                  <h5>Tư vấn Giải pháp AI</h5>
-                  <p>Chúng tôi phân tích nhu cầu doanh nghiệp, đề xuất lộ trình triển khai AI tối ưu nhằm tự động hóa quy trình, tối ưu vận hành.</p>
-                </div>
-                <div class="media-right icon-border"> <span class="fa fa-lightbulb" aria-hidden="true"></span> </div>
-              </div>
-
-              <!-- Dịch vụ Xây dựng giải pháp AI -->
-              <div class="media single-feature wow fadeInUp" data-wow-delay="0.4s">
-                <div class="media-body text-right media-right-margin">
-                  <h5>Xây dựng Giải pháp AI</h5>
-                  <p>Thiết kế và phát triển các mô hình AI tùy chỉnh theo nhu cầu, ứng dụng trong nhiều lĩnh vực như tài chính, y tế, sản xuất, bán lẻ, v.v.</p>
-                </div>
-                <div class="media-right icon-border"> <span class="fa fa-cogs" aria-hidden="true"></span> </div>
-              </div>
-
-              <!-- Dịch vụ Thực hiện dự án AI -->
-              <div class="media single-feature wow fadeInUp" data-wow-delay="0.6s">
-                <div class="media-body text-right media-right-margin">
-                  <h5>Thực hiện Dự án AI Theo Yêu Cầu</h5>
-                  <p>Hỗ trợ triển khai và tối ưu các dự án AI từ giai đoạn nghiên cứu, thử nghiệm đến sản phẩm hoàn thiện, đảm bảo hiệu quả và chất lượng.</p>
-                </div>
-                <div class="media-right icon-border"> <span class="fa fa-tasks" aria-hidden="true"></span> </div>
-              </div>
-            </div>
-
-            <!-- Ảnh minh họa ở giữa -->
-            <div class="col-md-4 d-none d-md-block d-lg-block">
-              <div class="feature-mobile" style="margin-top: 100px;">
-                <img src="images/AI_solution.webp" class="img-fluid wow fadeInUp"/>
-              </div>
-            </div>
-
-            <!-- Công nghệ hỗ trợ -->
-            <div class="col-md-4 col-sm-12">
-              <div class="media single-feature wow fadeInUp" data-wow-delay="0.2s">
-                <div class="media-left icon-border media-right-margin"> <span class="fa fa-robot" aria-hidden="true"></span> </div>
-                <div class="media-body text-left">
-                  <h5>Công nghệ Hỗ trợ</h5>
-                  <p>Chúng tôi ứng dụng các công nghệ tiên tiến: AI Agent, Gen AI, LLM, Computer Vision, Data Science, Deep Learning, Machine Learning.</p>
-                </div>
-              </div>
-
-              <!-- Công cụ hỗ trợ -->
-              <div class="media single-feature wow fadeInUp" data-wow-delay="0.4s">
-                <div class="media-left icon-border media-right-margin"> <span class="fa fa-tools" aria-hidden="true"></span> </div>
-                <div class="media-body text-left">
-                  <h5>Công cụ Triển khai</h5>
-                  <p>Chúng tôi sử dụng các công cụ hiện đại như n8n và nhiều nền tảng AI khác để giúp doanh nghiệp triển khai AI hiệu quả và linh hoạt.</p>
-                </div>
-              </div>
-
-              <!-- Tối ưu chi phí -->
-              <div class="media single-feature wow fadeInUp" data-wow-delay="0.6s">
-                <div class="media-left icon-border media-right-margin"> <span class="fa fa-dollar-sign" aria-hidden="true"></span> </div>
-                <div class="media-body text-left">
-                  <h5>Giải pháp Tiết kiệm Chi phí</h5>
-                  <p>Chúng tôi cam kết mang đến các giải pháp AI tối ưu với chi phí hợp lý, phù hợp cho cả doanh nghiệp và startup.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="pillar-info">
+          <h4>Chuyên nghiệp & Bài bản</h4>
+          <p>Quy trình nghiêm ngặt, đảm bảo tính chính xác và hiệu quả trong mọi dự án AI.</p>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div class="pillar-info">
+          <h4>Triển khai nhanh chóng</h4>
+          <p>Phương pháp agile linh hoạt, đưa giải pháp AI vào vận hành trong thời gian ngắn nhất.</p>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="pillar-info">
+          <h4>Hỗ trợ 24/7</h4>
+          <p>Đội ngũ luôn sẵn sàng, đảm bảo hệ thống của bạn vận hành liên tục và ổn định.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-------Features End-------> 
+<div class="neon-sep"></div>
 
-<!-------Team Start------->
-<section class="team section-padding" data-scroll-index='3'>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="sectioner-header text-center">
-          <h3>Khách hàng của chúng tôi</h3>
-          <span class="line"></span>
-          <p>Chúng tôi đồng hành cùng các tổ chức và cá nhân khai phá tiềm năng AI, tối ưu vận hành và nâng tầm sản phẩm.</p>
-        </div>
-        <div class="section-content text-center">
-          <div class="row">
-            <div class="col-md-6 col-lg-3">
-              <div class="client-detail wow fadeInUp" data-wow-delay="0.2s">
-                <i class="fas fa-building fa-3x mb-3"></i>
-                <h4>Doanh nghiệp</h4>
-                <p>Tối ưu chi phí, nâng cao hiệu suất với giải pháp AI tự động hóa.</p>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-              <div class="client-detail wow fadeInUp" data-wow-delay="0.4s">
-                <i class="fas fa-lightbulb fa-3x mb-3"></i>
-                <h4>Startup</h4>
-                <p>Ứng dụng AI để nâng cao trải nghiệm và giá trị sản phẩm.</p>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-              <div class="client-detail wow fadeInUp" data-wow-delay="0.6s">
-                <i class="fas fa-user fa-3x mb-3"></i>
-                <h4>Cá nhân</h4>
-                <p>Hỗ trợ giải quyết bài toán AI, triển khai dự án cá nhân.</p>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-              <div class="client-detail wow fadeInUp" data-wow-delay="0.8s">
-                <i class="fas fa-handshake fa-3x mb-3"></i>
-                <h4>Mọi khách hàng</h4>
-                <p>Sẵn sàng hợp tác với bất kỳ ai có nhu cầu ứng dụng AI.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+<!-- ===== SERVICES ===== -->
+<section id="services" class="section-pad">
+  <div class="section-header reveal">
+    <span class="section-label">// Dịch vụ</span>
+    <h2 class="section-title">Giải Pháp AI <span class="accent">Toàn Diện</span></h2>
+    <p class="section-desc">Từ tư vấn chiến lược đến triển khai thực tế — chúng tôi cung cấp toàn bộ hệ sinh thái AI cho doanh nghiệp của bạn.</p>
+    <div class="line-deco"><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="services-grid">
+    <!-- Card 1 -->
+    <div class="service-card reveal">
+      <div class="service-num">01 ——</div>
+      <div class="service-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      </div>
+      <h3>Tư Vấn Giải Pháp AI</h3>
+      <p>Phân tích nhu cầu doanh nghiệp, xây dựng lộ trình AI tối ưu, đề xuất công nghệ phù hợp với ngân sách và mục tiêu của bạn.</p>
+      <div class="service-tags">
+        <span class="service-tag">AI Strategy</span>
+        <span class="service-tag">ROI Analysis</span>
+        <span class="service-tag">Roadmap</span>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="service-card reveal">
+      <div class="service-num">02 ——</div>
+      <div class="service-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+      </div>
+      <h3>AI Chatbot & Virtual Assistant</h3>
+      <p>Xây dựng chatbot thông minh đa kênh (website, Zalo, Telegram, Facebook) với khả năng hiểu ngôn ngữ tự nhiên tiếng Việt, tích hợp tri thức doanh nghiệp.</p>
+      <div class="service-tags">
+        <span class="service-tag">LLM</span>
+        <span class="service-tag">RAG</span>
+        <span class="service-tag">Multi-channel</span>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="service-card reveal">
+      <div class="service-num">03 ——</div>
+      <div class="service-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12h8M12 8v8"/></svg>
+      </div>
+      <h3>Tự Động Hóa Quy Trình</h3>
+      <p>Thiết kế workflow tự động hóa end-to-end với n8n, Make, Zapier. Loại bỏ tác vụ thủ công lặp đi lặp lại, tiết kiệm 70-90% thời gian vận hành.</p>
+      <div class="service-tags">
+        <span class="service-tag">n8n</span>
+        <span class="service-tag">Workflow</span>
+        <span class="service-tag">Integration</span>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="service-card reveal">
+      <div class="service-num">04 ——</div>
+      <div class="service-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <h3>Computer Vision</h3>
+      <p>Giải pháp nhận diện hình ảnh, video thông minh: nhận dạng khuôn mặt, kiểm soát chất lượng sản xuất, phân tích hành vi khách hàng, camera AI an ninh.</p>
+      <div class="service-tags">
+        <span class="service-tag">Detection</span>
+        <span class="service-tag">Recognition</span>
+        <span class="service-tag">Analytics</span>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="service-card reveal">
+      <div class="service-num">05 ——</div>
+      <div class="service-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h3>Data Analytics & BI</h3>
+      <p>Biến dữ liệu thô thành insight có giá trị. Dashboard real-time, dự báo xu hướng, phân tích khách hàng, hỗ trợ ra quyết định dựa trên dữ liệu.</p>
+      <div class="service-tags">
+        <span class="service-tag">Dashboard</span>
+        <span class="service-tag">Prediction</span>
+        <span class="service-tag">Insight</span>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="service-card reveal">
+      <div class="service-num">06 ——</div>
+      <div class="service-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <h3>Dự Án AI Theo Yêu Cầu</h3>
+      <p>Nghiên cứu và phát triển giải pháp AI tùy chỉnh hoàn toàn theo bài toán đặc thù của doanh nghiệp: từ POC, prototype đến sản phẩm hoàn chỉnh.</p>
+      <div class="service-tags">
+        <span class="service-tag">Custom AI</span>
+        <span class="service-tag">R&D</span>
+        <span class="service-tag">Full-cycle</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-------Team End-------> 
+<div class="neon-sep"></div>
 
-<!-------Testimonial Start------->
+<!-- ===== SOLUTIONS ===== -->
+<section id="solutions" class="section-pad">
+  <div class="section-header reveal">
+    <span class="section-label">// Ứng dụng nổi bật</span>
+    <h2 class="section-title">AI Hỗ Trợ <span class="accent">Mọi Ngành</span></h2>
+    <p class="section-desc">Các giải pháp AI thực tế, đã được triển khai và chứng minh hiệu quả trong nhiều lĩnh vực.</p>
+    <div class="line-deco"><span></span><span></span><span></span></div>
+  </div>
 
-<!-------Contact Start------->
-<section class="contact section-padding" data-scroll-index='6'>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="sectioner-header text-center">
-          <h3>Liên hệ với chúng tôi</h3>
-          <span class="line"></span>
-          <p>Hãy kết nối với chúng tôi để cùng khám phá những giải pháp AI sáng tạo, tối ưu hóa hoạt động và nâng cao hiệu suất kinh doanh.</p>
-        </div>
-        <div class="section-content">
-          <div class="row">
-            <!-- Biểu mẫu liên hệ -->
-            <div class="col-sm-12 col-md-12 col-lg-8">
-              <form id="contact_form" action="https://formspree.io/f/xeoalojj" method="POST">
-                <div class="row">
-                  <div class="col">
-                    <input type="text" id="your_name" class="form-input w-100" name="full-name" placeholder="Họ và Tên" required>
-                  </div>
-                  <div class="col">
-                    <input type="email" id="email" class="form-input w-100" name="email" placeholder="Email của bạn" required>
-                  </div>
-                </div>
-                <input type="text" id="subject" class="form-input w-100" name="subject" placeholder="Số điện thoại">
-                <textarea class="form-input w-100" id="message" placeholder="Nội dung tin nhắn" name="message" required></textarea>
-                <button class="btn-grad w-100 text-uppercase" type="submit" id="submit_button">Gửi tin nhắn</button>
-                <div id="form_message" class="message-box"></div>
-              </form>
-            </div>
-
-            <!-- Thông tin liên hệ -->
-            <div class="col-sm-12 col-md-12 col-lg-4">
-              <div class="contact-info white">
-                <div class="contact-item media">
-                  <i class="fa fa-map-marker-alt media-left media-right-margin"></i>
-                  <div class="media-body">
-                    <p class="text-uppercase">Văn phòng</p>
-                    <p>Hà Nội, Việt Nam</p>
-                  </div>
-                </div>
-                <div class="contact-item media">
-                  <i class="fa fa-mobile media-left media-right-margin"></i>
-                  <div class="media-body">
-                    <p class="text-uppercase">Kết nối qua Telegram</p>
-                    <p><a class="text-white" href="https://t.me/thuatnh">@thuatnh</a></p>
-                  </div>
-                </div>
-                <div class="contact-item media">
-                  <i class="fa fa-envelope media-left media-right-margin"></i>
-                  <div class="media-body">
-                    <p class="text-uppercase">Email</p>
-                    <p><a class="text-white" href="mailto:thuatngh@gmail.com">thuatngh@gmail.com</a></p>
-                  </div>
-                </div>
-                <div class="contact-item media">
-                  <i class="fa fa-clock media-left media-right-margin"></i>
-                  <div class="media-body">
-                    <p class="text-uppercase">Thời gian hỗ trợ</p>
-                    <p>Hoạt động 24/7</p>
-                  </div>
-                </div>
-              </div>
-            </div> <!-- Kết thúc col-lg-4 -->
-
-          </div> <!-- Kết thúc row -->
-        </div>
-      </div>
+  <div class="solutions-grid">
+    <div class="solution-item reveal">
+      <div class="solution-emoji">🏨</div>
+      <h4>Khách Sạn & Hospitality</h4>
+      <p>Chatbot đặt phòng thông minh, quản lý yêu cầu khách hàng 24/7, tự động hóa check-in/check-out, phân tích đánh giá khách hàng.</p>
+    </div>
+    <div class="solution-item reveal">
+      <div class="solution-emoji">🏪</div>
+      <h4>Bán Lẻ & E-commerce</h4>
+      <p>Gợi ý sản phẩm cá nhân hóa, chatbot hỗ trợ khách hàng, dự báo tồn kho, phân tích hành vi mua sắm và tối ưu giá.</p>
+    </div>
+    <div class="solution-item reveal">
+      <div class="solution-emoji">🏭</div>
+      <h4>Sản Xuất & Chế Tạo</h4>
+      <p>Kiểm soát chất lượng tự động bằng Computer Vision, bảo trì dự đoán, tối ưu lịch trình sản xuất và quản lý chuỗi cung ứng.</p>
+    </div>
+    <div class="solution-item reveal">
+      <div class="solution-emoji">💼</div>
+      <h4>Tài Chính & Kế Toán</h4>
+      <p>Tự động hóa xử lý hoá đơn, phân tích rủi ro tín dụng, phát hiện gian lận, báo cáo tài chính thông minh và tuân thủ quy định.</p>
+    </div>
+    <div class="solution-item reveal">
+      <div class="solution-emoji">🏥</div>
+      <h4>Y Tế & Chăm Sóc Sức Khỏe</h4>
+      <p>Hỗ trợ chẩn đoán hình ảnh y tế, quản lý hồ sơ bệnh nhân thông minh, chatbot tư vấn sức khỏe và tối ưu lịch hẹn khám.</p>
+    </div>
+    <div class="solution-item reveal">
+      <div class="solution-emoji">📚</div>
+      <h4>Giáo Dục & Đào Tạo</h4>
+      <p>Trợ giảng AI cá nhân hóa, hệ thống đánh giá tự động, chatbot hỗ trợ học sinh 24/7 và phân tích hiệu quả học tập.</p>
+    </div>
+    <div class="solution-item reveal">
+      <div class="solution-emoji">🏢</div>
+      <h4>Doanh Nghiệp Vừa & Nhỏ</h4>
+      <p>Giải pháp AI chi phí thấp, dễ triển khai: tự động hóa email, quản lý lead, báo cáo thông minh và hỗ trợ nhân sự.</p>
+    </div>
+    <div class="solution-item reveal">
+      <div class="solution-emoji">👤</div>
+      <h4>Cá Nhân & Freelancer</h4>
+      <p>Công cụ AI cá nhân: tự động hóa workflow cá nhân, AI content creation, phân tích dữ liệu cá nhân và productivity tools.</p>
     </div>
   </div>
 </section>
 
+<div class="neon-sep"></div>
 
-<!-- JavaScript -->
+<!-- ===== CLIENTS ===== -->
+<section id="clients" class="section-pad">
+  <div class="section-header reveal">
+    <span class="section-label">// Đối tượng phục vụ</span>
+    <h2 class="section-title">Chúng Tôi Phục Vụ <span class="accent">Ai?</span></h2>
+    <p class="section-desc">Từ startup đến tập đoàn, từ cá nhân đến doanh nghiệp — AI4Life đồng hành cùng mọi quy mô.</p>
+    <div class="line-deco"><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="clients-grid">
+    <div class="client-card reveal">
+      <div class="client-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <h4>Doanh Nghiệp</h4>
+      <p>Tối ưu chi phí vận hành, tự động hóa quy trình và nâng cao năng lực cạnh tranh bằng AI.</p>
+    </div>
+    <div class="client-card reveal">
+      <div class="client-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h4>Startup</h4>
+      <p>Ứng dụng AI để tạo sản phẩm đột phá, tăng trưởng nhanh với nguồn lực tối thiểu.</p>
+    </div>
+    <div class="client-card reveal">
+      <div class="client-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <h4>Cá Nhân</h4>
+      <p>Giải quyết bài toán AI cụ thể, xây dựng công cụ cá nhân hóa và nâng cao năng suất.</p>
+    </div>
+    <div class="client-card reveal">
+      <div class="client-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <h4>Khách Sạn & Du Lịch</h4>
+      <p>Nâng cao trải nghiệm khách hàng, tối ưu vận hành và tăng doanh thu với AI.</p>
+    </div>
+  </div>
+</section>
+
+<div class="neon-sep"></div>
+
+<!-- ===== PROCESS ===== -->
+<section id="process" class="section-pad">
+  <div class="section-header reveal">
+    <span class="section-label">// Quy trình làm việc</span>
+    <h2 class="section-title">Từ Ý Tưởng Đến <span class="accent">Kết Quả</span></h2>
+    <div class="line-deco"><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="step-circle">01</div>
+      <h4>Khám Phá</h4>
+      <p>Lắng nghe, phân tích bài toán và nhu cầu thực tế của doanh nghiệp bạn.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-circle">02</div>
+      <h4>Thiết Kế</h4>
+      <p>Đề xuất kiến trúc giải pháp AI phù hợp, xây dựng lộ trình triển khai chi tiết.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-circle">03</div>
+      <h4>Phát Triển</h4>
+      <p>Xây dựng, huấn luyện và kiểm thử mô hình AI theo tiêu chuẩn chất lượng cao.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-circle">04</div>
+      <h4>Triển Khai</h4>
+      <p>Đưa vào vận hành thực tế, tích hợp hệ thống và đào tạo đội ngũ sử dụng.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-circle">05</div>
+      <h4>Tối Ưu</h4>
+      <p>Theo dõi hiệu suất, cải tiến liên tục và hỗ trợ vận hành 24/7.</p>
+    </div>
+  </div>
+</section>
+
+<div class="neon-sep"></div>
+
+<!-- ===== WHY ===== -->
+<section id="why" class="section-pad">
+  <div class="section-header reveal">
+    <span class="section-label">// Tại sao chọn chúng tôi</span>
+    <h2 class="section-title">Lợi Thế <span class="accent">AI4Life</span></h2>
+    <div class="line-deco"><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="why-grid">
+    <div class="why-item reveal">
+      <div class="why-num">01</div>
+      <h4>Giải pháp thực tế, không lý thuyết</h4>
+      <p>Mọi giải pháp đều được thiết kế để giải quyết bài toán kinh doanh thực tế, đo lường được kết quả rõ ràng.</p>
+    </div>
+    <div class="why-item reveal">
+      <div class="why-num">02</div>
+      <h4>Chi phí tối ưu cho mọi quy mô</h4>
+      <p>Không cần đầu tư hạ tầng lớn. Chúng tôi xây dựng giải pháp phù hợp với ngân sách từ startup đến enterprise.</p>
+    </div>
+    <div class="why-item reveal">
+      <div class="why-num">03</div>
+      <h4>Tích hợp nhanh, không gián đoạn</h4>
+      <p>Giải pháp AI được tích hợp liền mạch vào hệ thống hiện tại, không đòi hỏi thay thế toàn bộ infrastructure.</p>
+    </div>
+    <div class="why-item reveal">
+      <div class="why-num">04</div>
+      <h4>Tiếng Việt & am hiểu thị trường</h4>
+      <p>Đội ngũ hiểu sâu văn hóa kinh doanh Việt Nam, xây dựng AI thực sự phù hợp với người dùng địa phương.</p>
+    </div>
+    <div class="why-item reveal">
+      <div class="why-num">05</div>
+      <h4>Hỗ trợ & bảo trì liên tục</h4>
+      <p>Cam kết đồng hành dài hạn, không chỉ giao sản phẩm rồi biến mất. Hỗ trợ kỹ thuật 24/7 và cập nhật định kỳ.</p>
+    </div>
+    <div class="why-item reveal">
+      <div class="why-num">06</div>
+      <h4>Bảo mật & tuân thủ dữ liệu</h4>
+      <p>Cam kết bảo vệ dữ liệu doanh nghiệp, tuân thủ các tiêu chuẩn bảo mật quốc tế và quy định pháp lý Việt Nam.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section id="cta">
+  <h2 class="reveal">Sẵn Sàng Ứng Dụng <span>AI</span>?</h2>
+  <p class="reveal">Liên hệ ngay hôm nay để nhận tư vấn miễn phí và khám phá tiềm năng AI cho doanh nghiệp của bạn.</p>
+  <div class="cta-buttons reveal">
+    <a href="#contact" class="btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.22 2.18 2 2 0 012.2 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.91-.91a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+      Đặt Lịch Tư Vấn Miễn Phí
+    </a>
+    <a href="https://t.me/thuatnh" target="_blank" class="btn-outline">
+      Chat ngay trên Telegram →
+    </a>
+  </div>
+</section>
+
+<div class="neon-sep"></div>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="section-pad">
+  <div class="section-header reveal">
+    <span class="section-label">// Liên hệ</span>
+    <h2 class="section-title">Kết Nối Với <span class="accent">Chúng Tôi</span></h2>
+    <p class="section-desc">Hãy chia sẻ bài toán của bạn — chúng tôi sẽ đề xuất giải pháp AI phù hợp nhất.</p>
+    <div class="line-deco"><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="contact-layout">
+    <div class="contact-info reveal">
+      <h3>Thông tin liên hệ</h3>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="contact-item-text">
+          <p>Văn phòng</p>
+          <span>Hà Nội, Việt Nam</span>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.48 13.876l-2.94-.918c-.64-.203-.653-.64.136-.95l11.49-4.43c.532-.194 1-.12.853.671z"/></svg>
+        </div>
+        <div class="contact-item-text">
+          <p>Telegram</p>
+          <a href="https://t.me/thuatnh" target="_blank">@thuatnh</a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="contact-item-text">
+          <p>Email</p>
+          <a href="mailto:thuatngh@gmail.com">thuatngh@gmail.com</a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="contact-item-text">
+          <p>Thời gian hỗ trợ</p>
+          <span>Hoạt động 24/7</span>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm.48 17.29c-1.305 0-2.54-.36-3.585-.985L5.76 17.42l1.17-3.375A7.185 7.185 0 0112.48 6c3.975 0 7.2 3.225 7.2 7.2 0 3.975-3.225 7.2-7.2 7.2z"/></svg>
+        </div>
+        <div class="contact-item-text">
+          <p>Zalo</p>
+          <a href="https://zaloapp.com/qr/p/b0bw2k2jpmg7" target="_blank">Kết nối qua Zalo</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form reveal">
+      <form id="contact_form" action="https://formspree.io/f/xeoalojj" method="POST">
+        <div class="form-row">
+          <input type="text" class="form-input" name="full-name" placeholder="Họ và Tên *" required />
+          <input type="email" class="form-input" name="email" placeholder="Email của bạn *" required />
+        </div>
+        <input type="text" class="form-input" name="company" placeholder="Tên công ty / lĩnh vực" style="width:100%;margin-bottom:16px;" />
+        <input type="text" class="form-input" name="subject" placeholder="Số điện thoại" style="width:100%;margin-bottom:16px;" />
+        <textarea class="form-input" name="message" placeholder="Mô tả bài toán hoặc nhu cầu của bạn..." required></textarea>
+        <button type="submit" class="btn-submit" id="submit_btn">
+          Gửi Yêu Cầu Tư Vấn →
+        </button>
+        <div class="msg-box" id="msg_box"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-logo">
+    <svg width="36" height="36" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="flg" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#00f5ff"/>
+          <stop offset="100%" stop-color="#0af"/>
+        </linearGradient>
+      </defs>
+      <polygon points="22,2 40,12 40,32 22,42 4,32 4,12" fill="rgba(0,170,255,0.1)" stroke="url(#flg)" stroke-width="1.5"/>
+      <text x="7" y="27" font-family="Orbitron,monospace" font-size="11" font-weight="900" fill="url(#flg)">AI</text>
+      <circle cx="22" cy="6" r="2" fill="#00f5ff" opacity="0.8"/>
+      <circle cx="22" cy="38" r="2" fill="#00f5ff" opacity="0.8"/>
+    </svg>
+    <span class="footer-logo-text">AI4<span>LIFE</span></span>
+  </div>
+
+  <ul class="footer-links">
+    <li><a href="#about">Về chúng tôi</a></li>
+    <li><a href="#services">Dịch vụ</a></li>
+    <li><a href="#solutions">Giải pháp</a></li>
+    <li><a href="#clients">Khách hàng</a></li>
+    <li><a href="#contact">Liên hệ</a></li>
+  </ul>
+
+  <p class="footer-bottom">
+    © 2025 <span>AI4LIFE</span> · Tối ưu quy trình — Kiến tạo giá trị · Hà Nội, Việt Nam
+  </p>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
 <script>
-  document.getElementById("contact_form").addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      const form = event.target;
-      const formData = new FormData(form);
-      const submitButton = document.getElementById("submit_button");
-      const messageBox = document.getElementById("form_message");
-
-      // Hiển thị trạng thái loading
-      submitButton.disabled = true;
-      submitButton.innerHTML = "⏳ Đang gửi...";
-
-      try {
-          const response = await fetch(form.action, {
-              method: form.method,
-              body: formData,
-              headers: { "Accept": "application/json" }
-          });
-
-          if (response.ok) {
-              messageBox.innerHTML = "🎉 Tin nhắn của bạn đã được gửi thành công!";
-              messageBox.className = "message-box success";
-              form.reset();
-          } else {
-              messageBox.innerHTML = "❌ Lỗi! Vui lòng thử lại.";
-              messageBox.className = "message-box error";
-          }
-      } catch (error) {
-          console.error("Lỗi:", error);
-          messageBox.innerHTML = "❌ Đã xảy ra lỗi, vui lòng thử lại.";
-          messageBox.className = "message-box error";
-      }
-
-      // Reset trạng thái nút sau khi xử lý xong
-      submitButton.disabled = false;
-      submitButton.innerHTML = "Gửi tin nhắn";
-      messageBox.style.display = "block";
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
   });
-</script>
 
-<!-- CSS để hiển thị thông báo -->
-<style>
-  .message-box {
-      display: none;
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 5px;
-      font-weight: bold;
-      text-align: center;
-  }
-  .message-box.success {
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-  }
-  .message-box.error {
-      background-color: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-  }
-</style>
+  // Mobile nav
+  function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+  function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
 
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => observer.observe(el));
 
-<!-------Contact End-------> 
+  // Contact form
+  document.getElementById('contact_form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit_btn');
+    const msgBox = document.getElementById('msg_box');
+    btn.disabled = true;
+    btn.textContent = '⏳ Đang gửi...';
+    try {
+      const res = await fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        msgBox.className = 'msg-box success';
+        msgBox.textContent = '🎉 Yêu cầu đã được gửi thành công! Chúng tôi sẽ liên hệ trong 24 giờ.';
+        this.reset();
+      } else {
+        msgBox.className = 'msg-box error';
+        msgBox.textContent = '❌ Có lỗi xảy ra. Vui lòng thử lại hoặc liên hệ qua Telegram/Zalo.';
+      }
+    } catch {
+      msgBox.className = 'msg-box error';
+      msgBox.textContent = '❌ Không kết nối được. Vui lòng liên hệ trực tiếp qua Telegram: @thuatnh';
+    }
+    btn.disabled = false;
+    btn.textContent = 'Gửi Yêu Cầu Tư Vấn →';
+  });
 
+  // Smooth anchor scrolling
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script> 
-<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script> 
-<!-- scrollIt js --> 
-<script src="js/scrollIt.min.js"></script> 
-<script src="js/wow.min.js"></script> 
-<script>
-	wow = new WOW();
-	wow.init();
-$(document).ready(function(e) {
-
-	$('#video-icon').on('click',function(e){
-	e.preventDefault();
-	$('.video-popup').css('display','flex');
-	$('.iframe-src').slideDown();
-	});
-	$('.video-popup').on('click',function(e){
-	var $target = e.target.nodeName;
-	var video_src = $(this).find('iframe').attr('src');
-	if($target != 'IFRAME'){
-	$('.video-popup').fadeOut();
-	$('.iframe-src').slideUp();
-	$('.video-popup iframe').attr('src'," ");
-	$('.video-popup iframe').attr('src',video_src);
-	}
-	});
-
-	$('.slider').bxSlider({
-	pager: false
-	});
-});
-    
-$(window).on("scroll",function () {
-
-	var bodyScroll = $(window).scrollTop(),
-	navbar = $(".navbar");
-	
-	if(bodyScroll > 50){
-	$('.navbar-logo img').attr('src','images/logo.png');
-	navbar.addClass("nav-scroll");
-
-}else{
-	$('.navbar-logo img').attr('src','images/logo.png');
-	navbar.removeClass("nav-scroll");
-}
-
-});
-$(window).on("load",function (){
-	var bodyScroll = $(window).scrollTop(),
-	navbar = $(".navbar");
-	
-	if(bodyScroll > 50){
-	$('.navbar-logo img').attr('src','images/logo.png');
-	navbar.addClass("nav-scroll");
-	}else{
-	$('.navbar-logo img').attr('src','images/logo-white.png');
-	navbar.removeClass("nav-scroll");
-	}
-
-	$.scrollIt({
-	
-	easing: 'swing',      // the easing function for animation
-	scrollTime: 900,       // how long (in ms) the animation takes
-	activeClass: 'active', // class given to the active nav element
-	onPageChange: null,    // function(pageIndex) that is called when page is changed
-	topOffset: -63
-	});
-});
-
+  // Staggered reveal for grid items
+  const gridItems = document.querySelectorAll('.service-card, .solution-item, .client-card, .why-item, .process-step');
+  const gridObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const siblings = [...entry.target.parentElement.children];
+        const idx = siblings.indexOf(entry.target);
+        setTimeout(() => entry.target.classList.add('visible'), idx * 80);
+        gridObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  gridItems.forEach(el => { el.classList.add('reveal'); gridObserver.observe(el); });
 </script>
 </body>
 </html>
